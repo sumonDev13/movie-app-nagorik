@@ -1,19 +1,53 @@
 'use server';
 
-import { MovieDetails } from "../types";
+import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
+import { MovieDetails } from '@/app/types';
 
-let watchlist = new Map<number, MovieDetails>();
+type WatchlistState = {
+  movies: Map<number, MovieDetails>;
+  version: number;
+};
 
-export async function addToWatchlist(movie: MovieDetails) {
-  watchlist.set(movie.id, movie);
-  return { success: true };
+let watchlistState: WatchlistState = {
+  movies: new Map(),
+  version: 0,
+};
+
+export async function addToWatchlist(movie: MovieDetails, optimisticVersion: number) {
+  // Check if the optimistic update is still valid
+  if (optimisticVersion !== watchlistState.version) {
+    throw new Error('Optimistic update conflict');
+  }
+
+  watchlistState.movies.set(movie.id, movie);
+  watchlistState.version++;
+  
+  revalidatePath('/watchlist');
+  return { success: true, version: watchlistState.version };
 }
 
-export async function removeFromWatchlist(movieId: number) {
-  watchlist.delete(movieId);
-  return { success: true };
+export async function removeFromWatchlist(movieId: number, optimisticVersion: number) {
+  if (optimisticVersion !== watchlistState.version) {
+    throw new Error('Optimistic update conflict');
+  }
+
+  watchlistState.movies.delete(movieId);
+  watchlistState.version++;
+  
+  revalidatePath('/watchlist');
+  return { success: true, version: watchlistState.version };
 }
 
-export async function getWatchlist(): Promise<MovieDetails[]> {
-  return Array.from(watchlist.values());
+export async function getWatchlist() {
+  // Simulate checking authentication
+  const cookieStore = cookies();
+  if (!cookieStore.has('auth_token')) {
+    throw new Error('Unauthorized');
+  }
+  
+  return {
+    movies: Array.from(watchlistState.movies.values()),
+    version: watchlistState.version,
+  };
 }
