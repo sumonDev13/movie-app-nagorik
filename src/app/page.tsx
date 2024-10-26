@@ -1,24 +1,29 @@
-import { Suspense } from "react";
-import MovieGrid from "./components/MovieGrid";
-import { Movie } from "./types";
+'use client';
 
-async function getPopularMovies() {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&page=1`,
-    { next: { revalidate: 3600 } }
-  );
-  const data = await response.json();
-  return data.results as Movie[];
-}
+import { Suspense } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import MovieGrid from './components/MovieGrid';
+import { fetchPopularMovies } from './api/movies/movieAPI';
 
-export default async function Home() {
-  const initialMovies = await getPopularMovies();
+export default function Home() {
+  const { data: popularMovies, error } = useQuery({
+    queryKey: ['popularMovies'],
+    queryFn: fetchPopularMovies,
+  });
+
+  if (error) {
+    return <div>Error loading popular movies. Please try again later.</div>;
+  }
+
+  if (!popularMovies) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main>
       <h1 className="my-4 text-center text-3xl font-black">Popular Movies</h1>
       <Suspense fallback={<div>Loading...</div>}>
-        <MovieGrid initialMovies={initialMovies} />
+        <MovieGrid initialMovies={popularMovies} />
       </Suspense>
     </main>
   );
