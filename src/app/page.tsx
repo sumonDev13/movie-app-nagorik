@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
-import MovieGrid from './components/MovieGrid';
-import { Movie } from './types';
+import { Suspense } from "react";
+import MovieGrid from "./components/MovieGrid";
+import { Movie } from "./types";
 
 async function getPopularMovies() {
   const response = await fetch(
@@ -16,6 +16,7 @@ export default async function Home() {
 
   return (
     <main>
+      <h1 className="my-4 text-center text-3xl font-black">Popular Movies</h1>
       <Suspense fallback={<div>Loading...</div>}>
         <MovieGrid initialMovies={initialMovies} />
       </Suspense>
