@@ -3,9 +3,10 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetails,fetchMovieCredits,fetchMovieRecommendations } from '@/app/api/movies/movieAPI';
+import { fetchMovieCredits,fetchMovieDetails,fetchMovieRecommendations } from '@/app/api/movies/movieAPI';
 import MovieGrid from '@/app/components/MovieGrid';
 import WatchlistButton from '@/app/components/WatchlistButton';
+import { ZodError } from 'zod';
 
 export default function MoviePage({ params }: { params: { id: string } }) {
     const { data: movie, error: movieError } = useQuery({
@@ -24,7 +25,10 @@ export default function MoviePage({ params }: { params: { id: string } }) {
     });
 
     if (movieError || creditsError || recommendationsError) {
-        return <div>Error loading movie details. Please try again later.</div>;
+        const errorMessage = movieError instanceof ZodError || creditsError instanceof ZodError || recommendationsError instanceof ZodError
+            ? 'Invalid data received from API'
+            : 'Error loading movie details. Please try again later.';
+        return <div>{errorMessage}</div>;
     }
 
     if (!movie || !credits || !recommendations) {

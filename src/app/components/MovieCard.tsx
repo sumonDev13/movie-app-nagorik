@@ -29,7 +29,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           </p>
           <div className="flex items-center">
             <span className="text-yellow-500">★</span>
-            <span className="ml-1 text-gray-700">{movie.vote_average.toFixed(1)}</span>
+            <span className="ml-1 text-gray-700">{movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
           </div>
         </div>
       </div>
