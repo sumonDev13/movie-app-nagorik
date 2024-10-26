@@ -67,7 +67,12 @@ export default function MovieGrid({
   }, [searchQuery, initialMovies]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+    <main className="min-h-screen">
+      <div className="max-w-full mx-5 xl:max-w-[1280px] xl:mx-auto py-20">
+      <div className="flex items-center justify-between">
+          <h1 className="my-4 text-3xl font-black">Popular Movies</h1>
+        </div>
+    <div className="grid w-full grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5">
       {movies.map((movie, index) => (
         <div
           key={`${movie.id}-${index}`}
@@ -87,5 +92,7 @@ export default function MovieGrid({
         </div>
       )}
     </div>
+    </div>
+    </main>
   );
 }
