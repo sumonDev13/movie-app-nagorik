@@ -48,7 +48,6 @@ export async function fetchMovieDetails(id: string): Promise<MovieDetails> {
   if (!response.ok) throw new Error("Network response was not ok");
 
   const data = await response.json();
- // @ts-ignore
   return movieDetailsSchema.parse(data); // Validate response
 }
 
@@ -65,7 +64,6 @@ export async function fetchMovieCredits(
   if (!response.ok) throw new Error("Network response was not ok");
 
   const data = await response.json();
-  // @ts-ignore
   return { cast: z.array(castMemberSchema).parse(data.cast) };
 }
 
@@ -82,6 +80,5 @@ export async function fetchMovieRecommendations(
   if (!response.ok) throw new Error("Network response was not ok");
 
   const data = await response.json();
-  // @ts-ignore
   return recommendationsSchema.parse(data); // Validate response
 }
