@@ -1,27 +1,30 @@
+'use client';
+
 import { Suspense } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import MovieGrid from '../components/MovieGrid';
-import { Movie } from '../types';
+import { searchMovies } from '../api/movies/movieAPI';
 
-async function searchMovies(query: string) {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&query=${query}&page=1`
-  );
-  const data = await response.json();
-  return data.results as Movie[];
-}
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: { q: string };
-}) {
-  const initialMovies = await searchMovies(searchParams.q);
+export default function SearchPage({ searchParams }: { searchParams: { q: string } }) {
+    const { data: movies, error } = useQuery({
+        queryKey: ['searchMovies', searchParams.q],
+        queryFn: () => searchMovies(searchParams.q),
+    });
 
-  return (
-    <main>
-      <Suspense fallback={<div>Loading...</div>}>
-        <MovieGrid initialMovies={initialMovies} searchQuery={searchParams.q} />
-      </Suspense>
-    </main>
-  );
+    if (error) {
+        return <div>Error loading search results. Please try again later.</div>;
+    }
+
+    if (!movies) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <main>
+            <Suspense fallback={<div>Loading...</div>}>
+                <MovieGrid initialMovies={movies} searchQuery={searchParams.q} />
+            </Suspense>
+        </main>
+    );
 }

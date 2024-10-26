@@ -9,6 +9,13 @@ export async function fetchPopularMovies(): Promise<Movie[]> {
     return data.results as Movie[];
   }
 
+  export async function searchMovies(query: string): Promise<Movie[]> {
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}&page=1`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return data.results as Movie[];
+}
+
 export async function fetchMovieDetails(id: string): Promise<MovieDetails> {
     const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`);
     if (!response.ok) throw new Error('Network response was not ok');
