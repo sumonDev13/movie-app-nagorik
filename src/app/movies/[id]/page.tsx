@@ -60,7 +60,7 @@ export default function MoviePage({ params }: { params: { id: string } }) {
                     <p className="text-lg mb-6">{movie.overview}</p>
                     <div className="mb-6">
                         <p><strong>Release Date:</strong> {new Date(movie.release_date).toLocaleDateString()}</p>
-                        <p><strong>Runtime:</strong> {movie.runtime} minutes</p>
+                        <p><strong>Runtime:</strong> {movie.runtime !== null ? `${movie.runtime} minutes` : 'N/A'}</p>
                         <p><strong>Rating:</strong> {movie.vote_average.toFixed(1)}/10</p>
                         <div className="mt-4">
                             <WatchlistButton movieId={params.id} />

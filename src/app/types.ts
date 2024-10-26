@@ -9,7 +9,7 @@ export interface Movie {
 
   export interface MovieDetails extends Movie {
     genres: { id: number; name: string }[];
-    runtime: number;
+    runtime: number | null;
     tagline: string;
   }
   
