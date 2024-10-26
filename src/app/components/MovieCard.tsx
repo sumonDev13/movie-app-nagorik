@@ -23,13 +23,13 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           />
         </div>
         <div className="p-4">
-          <h2 className="text-xl font-semibold mb-2">{movie.title}</h2>
+          <h2 className="text-xl font-semibold mb-2 text-black">{movie.title}</h2>
           <p className="text-gray-600 text-sm mb-2">
             {new Date(movie.release_date).getFullYear()}
           </p>
           <div className="flex items-center">
             <span className="text-yellow-500">★</span>
-            <span className="ml-1">{movie.vote_average.toFixed(1)}</span>
+            <span className="ml-1 text-gray-700">{movie.vote_average.toFixed(1)}</span>
           </div>
         </div>
       </div>
