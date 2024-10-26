@@ -3,29 +3,9 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MovieDetails, CastMember, Movie } from '@/app/types';
+import { fetchMovieDetails,fetchMovieCredits,fetchMovieRecommendations } from '@/app/api/movies/movieAPI';
 import MovieGrid from '@/app/components/MovieGrid';
 import WatchlistButton from '@/app/components/WatchlistButton';
-
-const API_KEY = 'ed69594f8071f59fdfdb507a02db709d';
-
-async function fetchMovieDetails(id: string): Promise<MovieDetails> {
-    const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-}
-
-async function fetchMovieCredits(id: string): Promise<{ cast: CastMember[] }> {
-    const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-}
-
-async function fetchMovieRecommendations(id: string): Promise<{ results: Movie[] }> {
-    const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-}
 
 export default function MoviePage({ params }: { params: { id: string } }) {
     const { data: movie, error: movieError } = useQuery({
