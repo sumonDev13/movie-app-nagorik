@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { MovieDetails, CastMember, Movie } from '@/app/types';
-import WatchlistButton from './WatchlistButton';
 import MovieGrid from '@/app/components/MovieGrid';
+import WatchlistButton from '@/app/components/WatchlistButton';
 
 async function getMovieDetails(id: string): Promise<MovieDetails> {
   const response = await fetch(
@@ -80,9 +80,13 @@ export default async function MoviePage({ params }: { params: { id: string } }) 
             <p>
               <strong>Rating:</strong> {movie.vote_average.toFixed(1)}/10
             </p>
+            
+            {/* Add Watchlist Button */}
+            <div className="mt-4">
+              <WatchlistButton movieId={params.id} />
+            </div>
           </div>
 
-          <WatchlistButton movie={movie} />
         </div>
       </div>
 
