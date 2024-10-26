@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import MovieGrid from '../components/MovieGrid';
-import SearchBar from '../components/SearchBar';
 import { Movie } from '../types';
 
 async function searchMovies(query: string) {
@@ -20,7 +19,6 @@ export default async function SearchPage({
 
   return (
     <main>
-      <SearchBar />
       <Suspense fallback={<div>Loading...</div>}>
         <MovieGrid initialMovies={initialMovies} searchQuery={searchParams.q} />
       </Suspense>

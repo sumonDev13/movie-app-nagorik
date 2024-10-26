@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import MovieGrid from './components/MovieGrid';
-import SearchBar from './components/SearchBar';
 import { Movie } from './types';
 
 async function getPopularMovies() {
@@ -17,7 +16,6 @@ export default async function Home() {
 
   return (
     <main>
-      <SearchBar />
       <Suspense fallback={<div>Loading...</div>}>
         <MovieGrid initialMovies={initialMovies} />
       </Suspense>
